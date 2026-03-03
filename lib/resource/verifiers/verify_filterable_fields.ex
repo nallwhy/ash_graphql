@@ -75,8 +75,6 @@ defmodule AshGraphql.Resource.Verifiers.VerifyFilterableFields do
   end
 
   defp valid_operator_names(dsl) do
-    resource = Transformer.get_persisted(dsl, :module)
-
     builtin =
       Ash.Filter.builtin_operators()
       |> Enum.filter(& &1.predicate?())
@@ -84,7 +82,7 @@ defmodule AshGraphql.Resource.Verifiers.VerifyFilterableFields do
 
     data_layer_functions =
       try do
-        Ash.DataLayer.functions(resource)
+        Ash.DataLayer.functions(dsl)
         |> Enum.filter(& &1.predicate?())
         |> Enum.map(& &1.name())
       rescue
